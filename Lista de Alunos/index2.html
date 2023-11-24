@@ -140,51 +140,44 @@
       <script>
 
         (function(){ 
-          
-          function pegaIndice(indice){
+
             const trHeader = document.querySelector("thead tr")
             const thsHeader = trHeader.querySelectorAll("th")
+            const thsAlunoNotas = trHeader.querySelectorAll("[aluno-nota]")
+            const INDICES_NOTAS = {}
 
-            const th = trHeader.querySelector(`[aluno-nota="${indice}"`)
-            console.log(th)
+            Array.from(thsAlunoNotas).forEach(function(th){
+                let prop = (th.getAttribute("aluno-nota"))
+                INDICES_NOTAS[prop] = pegaIndice(prop)
+            })
+            
+            function pegaIndice(indice){
+                const th = trHeader.querySelector(`[aluno-nota="${indice}"`)
+                const i = [...thsHeader].indexOf(th)
+                return i
+            }
 
-            // thsHeader.indexOf() >>>código inváido<<<
-            // const i = Array.prototype.indexOf.call(thsHeader, th)
-            // const i = Array.from(thsHeader).indexOf(th)
-            const i = [...thsHeader].indexOf(th)
-            return i
-          }
+            console.log(INDICES_NOTAS)
+            
+            const trs = document.querySelectorAll("tbody tr")
 
-        const INDICES_NOTAS = {
-          n1: pegaIndice("n1"),
-          n2: pegaIndice("n2"),
-          n3: pegaIndice("n3"),
-          n4: pegaIndice("n4"),
-          media: pegaIndice("media")
-        };
+            let x = 0
+            let media = 0
 
-        
-          const trs = document.querySelectorAll("tbody tr")
+            while(trs[x]){
 
-          let x = 0
-          let media = 0
+                const tds = trs[x].querySelectorAll("td")
 
-          while(trs[x]){
-            console.log(trs[x])
+                media = average(
+                    parseFloat(tds[INDICES_NOTAS.n1].textContent),
+                    parseFloat(tds[INDICES_NOTAS.n2].textContent),
+                    parseFloat(tds[INDICES_NOTAS.n3].textContent),
+                    parseFloat(tds[INDICES_NOTAS.n4].textContent)
+                )
+                x++
 
-            const tds = trs[x].querySelectorAll("td")
-            console.log(tds)
-
-            media = average(
-              parseFloat(tds[INDICES_NOTAS.n1].textContent),
-              parseFloat(tds[INDICES_NOTAS.n2].textContent),
-              parseFloat(tds[INDICES_NOTAS.n3].textContent),
-              parseFloat(tds[INDICES_NOTAS.n4].textContent)
-            )
-            x++
-
-            tds[INDICES_NOTAS.media].textContent = media
-          }
+                tds[INDICES_NOTAS.media].textContent = media
+            }
         })()
       </script>
 
